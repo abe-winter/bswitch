@@ -1,0 +1,1 @@
+from bswitch import decorate
