@@ -2,6 +2,12 @@
 
 bswitch analyzes and rewrites the bytecode of long `if` statements so that the function will use binary search to skip unnecessary comparisons.
 
+Binary search for long if statements has been proposed and voted down for inclusion to the core python language (https://www.python.org/dev/peps/pep-0275/). This package sort of does that but with limitations (see below) and, probably, bugs.
+
+## Installation
+
+`pip install git+https://github.com/abe-winter/bswitch.git`
+
 ## Example
 
 ```python
@@ -35,5 +41,5 @@ def f(x):
 * this can introduce undefined behavior in your program
 * the function has to consist entirely of a single if / elif / else composite statement
 * every if clause has to be (some expression) == constant. the expression has to be the same every time. the constant can't be a variable, it has to be a constant. (these are limits of the analyzer and may be relaxed eventually)
-* 'binary search' is an overstatement. For now, it just sorts the `if` bodies and dispatches to the middle if your expression is greater than the median.
+* 'binary search' is an overstatement. For now, it just sorts the `if` bodies and dispatches to the middle if your expression is greater than the median. also, the binary search logic doesn't know how to short-circuit so high values will be optimized but low values will still have to go through all the tests.
 * new, not well-tested. likely to be lots of edge cases that aren't handled well.

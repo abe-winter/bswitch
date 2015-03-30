@@ -36,7 +36,7 @@ def test_analyze_jumps():
   jumps = bswitch.group_jumps(commands)
   aj = bswitch.analyze_jumps(jumps)
   assert aj.load_left == [bswitch.ByteCommand(0,124,0)]
-  assert aj.constant2offset == {1: 16, 3: 32}
+  assert aj.constant2offset == {1: 0, 3: 16}
 
 def test_regen():
   "can we generate a function from exact same bytecode"
@@ -66,7 +66,13 @@ def test_decorate():
   assert map(f2, (0,1,2)) == ['c','b','a']
   @bswitch.decorate
   def f(x):
-    if x==1: return 'a'
-    elif x==2: return 'b'
-    else: return 'c'
-  assert map(f, (0,1,2)) == ['c','b','a']
+    if x==1: return x
+    elif x==2: return x
+    elif x==3: return x
+    elif x==4: return x
+    elif x==5: return x
+    elif x==6: return x
+    elif x==7: return x
+    elif x==8: return x
+    else: return 'nomatch'
+  assert map(f, range(10)) == ['nomatch',1,2,3,4,5,6,7,8,'nomatch']

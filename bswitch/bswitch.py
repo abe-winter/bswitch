@@ -2,7 +2,6 @@
 For functions that are composed of long if statements testing a value, this rewrites their bytecode.
 """
 # todo: check platform.python_implementation() somewhere
-# this PEP talks about if-stmt analysis for switch emulation: https://www.python.org/dev/peps/pep-0275/
 
 import collections, opcode, struct, dis, copy
 
@@ -77,7 +76,7 @@ def analyze_jumps(jumps):
     if any(h0[1:]!=hi[1:] for h0,hi in zip(head0[:-3],headi[:-3])): raise BadJumpTable('preamble mismatch',i)
   for i in range(1,len(jumps)-1): compare_head(jumps[i].head,i)
   load_left = head0[:-3] # sans the const, sans the compare, sans the jump
-  const2offset = {j.head[-3].arg:j.head[-1].arg for j in jumps[:-1]}
+  const2offset = {j.head[-3].arg:j.head[0].pos for j in jumps[:-1]}
   return JumpCmp(load_left, const2offset)
 
 def reorder(consts, jumps):
