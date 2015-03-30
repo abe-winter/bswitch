@@ -19,7 +19,7 @@ def f(x):
   elif x==3: return 'c'
   else: return 'd'
 >>> map(f,[0,1,2])
-['c', 'a', 'b']
+['d', 'a', 'b']
 ```
 
 Nothing too impressive, but under the hood your function could be up to twice as fast, assuming all the load is happening in the if statement. For longish if statements, that may be close to the truth. (It may not be; I don't have any profiling results suggesting this is a good idea).
