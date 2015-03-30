@@ -48,8 +48,8 @@ def f(x):
 
 Obvious places for improvement:
 
-* real binary search instead of the hacked median system in place
+* real binary search instead of the hacked median system in place. perfect hashing where appropriate.
 * support for non-constant expressions (global vars, for example)
 * code cleanup: factor out the bytecode manipulators
-* smarter decompilation and bytecode analysis
+* smarter decompilation and bytecode analysis. better intermediate representations.
 * better tests!
