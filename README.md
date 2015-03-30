@@ -43,3 +43,13 @@ def f(x):
 * every if clause has to be (some expression) == constant. the expression has to be the same every time. the constant can't be a variable, it has to be a constant. (these are limits of the analyzer and may be relaxed eventually)
 * 'binary search' is an overstatement. For now, it just sorts the `if` bodies and dispatches to the middle if your expression is greater than the median. also, the binary search logic doesn't know how to short-circuit so high values will be optimized but low values will still have to go through all the tests.
 * new, not well-tested. likely to be lots of edge cases that aren't handled well.
+
+## Contributors
+
+Obvious places for improvement:
+
+* real binary search instead of the hacked median system in place
+* support for non-constant expressions (global vars, for example)
+* code cleanup: factor out the bytecode manipulators
+* smarter decompilation and bytecode analysis
+* better tests!
