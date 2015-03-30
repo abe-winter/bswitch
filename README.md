@@ -1,6 +1,6 @@
 # bswitch
 
-bswitch analyzes and rewrites the bytecode of long `if` statements so that the function will use binary search to 
+bswitch analyzes and rewrites the bytecode of long `if` statements so that the function will use binary search to skip unnecessary comparisons.
 
 ## Example
 
@@ -24,9 +24,9 @@ Under the hood, your function now looks more like this:
 def f(x):
   if x < 2:
     if x==1: return 'a'
-    elif x==2: return 'b'
   else:
-    if x==3: return 'c'
+    if x==2: return 'b'
+    elif x==3: return 'c'
   return 'd'
 ```
 
