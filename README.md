@@ -46,10 +46,11 @@ def f(x):
 
 ## Contributors
 
-Obvious places for improvement:
+Ideas for improvement:
 
 * real binary search instead of the hacked median system in place. perfect hashing where appropriate.
 * support for non-constant expressions (global vars, for example)
 * code cleanup: factor out the bytecode manipulators
 * smarter decompilation and bytecode analysis. better intermediate representations.
-* better tests!
+* better tests! in particular, test that functions which don't meet our requirements are being rejected
+* decorator flag to require an else statement or ensure that the if statement hits every value of an enum
