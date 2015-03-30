@@ -1,9 +1,8 @@
 """bswitch.py -- binary-tree switch statement
 For functions that are composed of long if statements testing a value, this rewrites their bytecode.
 """
-# todo: check platform.python_implementation() somewhere
 
-import collections, opcode, struct, dis, copy
+import collections, opcode, struct, dis, copy, platform
 
 class BadJumpTable(StandardError): "the input bytecode isn't right for switch conversion"
 class HugeRelativeJump(StandardError): "relative jumps outside of Jump.body"
@@ -162,6 +161,9 @@ def bytecode2function(bytecode, old_function):
 
 def decorate(f):
   "optimize an if-else function with binary search"
+  if platform.python_implementation() != 'CPython': raise EnvironmentError('probably CPython only')
+  if platform.python_version_tuple()[:2] != ('2','7'):
+    raise EnvironmentError('not tested except py 2.7')
   commands = byte_unpack(f.func_code.co_code)
   jumps = group_jumps(commands)
   ordered = reorder(f.func_code.co_consts, jumps)
