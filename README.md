@@ -22,7 +22,7 @@ def f(x):
 ['c', 'a', 'b']
 ```
 
-Nothing too impressive, but under the hood your function could be up to twice as fast, assuming all the load is happening in the if statement. For longish if statements, that may be close to the truth.
+Nothing too impressive, but under the hood your function could be up to twice as fast, assuming all the load is happening in the if statement. For longish if statements, that may be close to the truth. (It may not be; I don't have any profiling results suggesting this is a good idea).
 
 Under the hood, your function now looks more like this:
 
