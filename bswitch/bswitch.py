@@ -6,6 +6,7 @@ import collections, opcode, struct, dis, copy, platform
 
 class BadJumpTable(StandardError): "the input bytecode isn't right for switch conversion"
 class HugeRelativeJump(StandardError): "relative jumps outside of Jump.body"
+class AnalysisError(StandardError): pass
 
 ARG = struct.Struct('<H') # for packing and unpacking arguments
 
@@ -98,13 +99,23 @@ def reorder(consts, jumps):
   return sorted_jumps
 
 def global_preamble(consts, jumps, jumpcmp):
-  "create a global preamble that does binary search. for now, this just splits on the median; get fancier"
+  """create a global preamble that does binary search. for now, this just splits on the median; get fancier.
+  this relies on jumps being sorted by constants, i.e. reorder() has been called.
+  warning! edits jumps in place (has the block before the median short-circuit to the else block)
+  returns preamble instructions.
+  """
   sorted_consts = sorted(map(consts.__getitem__,jumpcmp.constant2offset))
   median = sorted_consts[len(sorted_consts)/2]
+  median_offset = jumpcmp.constant2offset[consts.index(median)]
+  median_block_index = next((i for i,j in enumerate(jumps) if j.head and j.head[0].pos==median_offset), None)
+  if median_block_index is None: raise AnalysisError("can't find median block", median, median_offset, sorted_consts)
+  if median_block_index == 0: raise AnalysisError('median is at 0')
+  median_jump = jumps[median_block_index-1]
+  median_jump.head[-1] = median_jump.head[-1]._replace(arg=jumps[-1].body[0].pos)
   return jumps[0].head[:-3] + [
     jumps[0].head[-3]._replace(arg=consts.index(median)), # todo: support globals too (2 instructions instead of 1)
     ByteCommand(-1, opcode.opmap['COMPARE_OP'], dis.cmp_op.index('>=')),
-    ByteCommand(-1, opcode.opmap['POP_JUMP_IF_TRUE'], jumpcmp.constant2offset[consts.index(median)]),
+    ByteCommand(-1, opcode.opmap['POP_JUMP_IF_TRUE'], median_offset),
   ]
 
 def reposition_commands(commands):
