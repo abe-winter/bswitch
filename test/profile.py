@@ -28,12 +28,12 @@ flong_switched = bswitch.decorate(flong)
 def main():
   for status, f in zip(('normal', 'fast'), (flong, flong_switched)):
     for valname, val in zip(('lo','hi','else'),(2,66,1000)):
-      t0 = time.time()
+      t0 = time.clock()
       for i in range(100000): f(val)
-      print status, valname, '%.3fs' % (time.time() - t0)
-    t0 = time.time()
+      print status, valname, '%.3fs' % (time.clock() - t0)
+    t0 = time.clock()
     for i in range(10000):
       for v in VALS: f(v)
-    print status, 'average', '%.3fs' % (time.time() - t0)
+    print status, 'average', '%.3fs' % (time.clock() - t0)
 
 if __name__ == '__main__': main()

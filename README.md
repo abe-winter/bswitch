@@ -46,16 +46,16 @@ def f(x):
 
 ## Profiling results
 
-This is from running `python -m test.profile` on my laptop exactly once.
+This is from running `python -m test.profile` on my laptop 3 times. The milliseconds numbers are `average_of_3_runs ms (std dev)`.
 ```
-value_type | normal | rewritten | speedup
------------|--------|-----------|--------
-low        | 28 ms  | 24 ms     | 15% 
-high       | 70 ms  | 37 ms     | 47%
-else       | 56 ms  | 34 ms     | 39%
-average    | 73 ms  | 48 ms     | 34%
+value_type | normal     | rewritten | speedup
+-----------|------------|-----------|--------
+low        | 24 ms (3)  | 22 ms (4) | 10%
+high       | 58 ms (6)  | 39 ms (7) | 33%
+else       | 59 ms (8)  | 37 ms (3) | 37%
+average    | 65 ms (5)  | 47 ms (2) | 27%
 ```
-Take it with a huge grain of salt, because low values (below the median) should run slightly slower on the mangled function. i.e. the first line of this is a fluke, i.e. take everything +- 20 percent.
+The 'low' case seems faster for the rewritten function, but it should be slightly slower. I think the cause is the ordering of the tests; there seems to be a warmup penalty for the first test case (low+normal). Changing the test order seems to erase the rewritten+low advantage. The other tests (in particular average, the one to watch) keep their advantage.
 
 ## Contributors
 
