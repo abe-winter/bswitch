@@ -55,7 +55,7 @@ high       | 70 ms  | 37 ms     | 47%
 else       | 56 ms  | 34 ms     | 39%
 average    | 73 ms  | 48 ms     | 34%
 ```
-Take it with a huge grain of salt, because low values usually run faster on the mangled function (i.e. the first line of this is a fluke).
+Take it with a huge grain of salt, because low values (below the median) should run slightly slower on the mangled function. i.e. the first line of this is a fluke, i.e. take everything +- 20 percent.
 
 ## Contributors
 
