@@ -22,7 +22,7 @@ def f(x):
 ['d', 'a', 'b']
 ```
 
-Nothing too impressive, but under the hood your function could be up to twice as fast, assuming all the load is happening in the if statement. For longish if statements, that may be close to the truth. (It may not be; I don't have any profiling results suggesting this is a good idea).
+Nothing too impressive, but your function is now twice as fast, assuming all the load is happening in the if statement. For longish if statements, that may be close to the truth. (see test/profile.py).
 
 Under the hood, your function now looks more like this:
 
@@ -40,9 +40,22 @@ def f(x):
 
 * this can introduce undefined behavior in your program
 * the function has to consist entirely of a single if / elif / else composite statement
-* every if clause has to be (some expression) == constant. the expression has to be the same every time. the constant can't be a variable, it has to be a constant. (these are limits of the analyzer and may be relaxed eventually)
-* 'binary search' is an overstatement. For now, it just sorts the `if` bodies and dispatches to the middle if your expression is greater than the median. also, the binary search logic doesn't know how to short-circuit so high values will be optimized but low values will still have to go through all the tests.
+* every if clause has to be `some_expression == constant`. the expression has to be the same every time. the constant can't be a variable, it has to be a constant. (these are limits of the analyzer and may be relaxed eventually)
+* 'binary search' is an overstatement. For now, it just sorts the `if` bodies and dispatches to the middle if your expression is greater than the median.
 * new, not well-tested. likely to be lots of edge cases that aren't handled well.
+
+## Profiling results
+
+This is from running `python -m test.profile` on my laptop exactly once.
+```
+value_type | normal | rewritten | speedup
+-----------|--------|-----------|--------
+low        | 28 ms  | 24 ms     | 15% 
+high       | 70 ms  | 37 ms     | 47%
+else       | 56 ms  | 34 ms     | 39%
+average    | 73 ms  | 48 ms     | 34%
+```
+Take it with a huge grain of salt, because low values usually run faster on the mangled function (i.e. the first line of this is a fluke).
 
 ## Contributors
 
@@ -54,3 +67,4 @@ Ideas for improvement:
 * smarter decompilation and bytecode analysis. better intermediate representations.
 * better tests! in particular, test that functions which don't meet our requirements are being rejected
 * decorator flag to require an else statement or ensure that the if statement hits every value of an enum
+* profiling suite showing this is (more likely, isn't) worth using
