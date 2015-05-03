@@ -1,6 +1,8 @@
 """bswitch.py -- binary-tree switch statement
 For functions that are composed of long if statements testing a value, this rewrites their bytecode.
 """
+# todo: try this out https://pypi.python.org/pypi/BytecodeAssembler
+# todo: also this http://pydoc.org/2.5.1/compiler.pyassem.html
 
 import collections, opcode, struct, dis, copy, platform
 
